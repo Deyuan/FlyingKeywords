@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
-public class FlyingThoughts extends JPanel{
+public class FlyingKeywords extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	public static final int MAX_FONT = 100;
@@ -28,7 +28,7 @@ public class FlyingThoughts extends JPanel{
 	public int height;
 	public List<String> words;
 
-	FlyingThoughts(){
+	FlyingKeywords(){
 		this.setLayout(null);
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
@@ -100,9 +100,9 @@ public class FlyingThoughts extends JPanel{
 		int font;
 		int y;
 		final int step = 5;
-		FlyingThoughts ft;
+		FlyingKeywords ft;
 
-		FlyingThread(FlyingThoughts ft, String s){
+		FlyingThread(FlyingKeywords ft, String s){
 			this.ft = ft;
 			this.s = s;
 			Random r = new Random();
@@ -202,7 +202,7 @@ public class FlyingThoughts extends JPanel{
 		frame.setVisible(true);
  		/** Set it as full screen. */
  		frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
-		FlyingThoughts ft = new FlyingThoughts();
+		FlyingKeywords ft = new FlyingKeywords();
  		ft.width = frame.getWidth();
  		ft.height = frame.getHeight();
 		frame.setContentPane(ft);
