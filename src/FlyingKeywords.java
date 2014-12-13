@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,10 +18,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-
-public class FlyingKeywords extends JPanel{
+/**
+ * FlyingKeywords.
+ * @author Dawei Fan, Deyuan Guo
+ */
+public class FlyingKeywords extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	// TODO: font size and speed should be a function of window size.
 	public static final int MAX_FONT = 100;
 	public static final int MIN_FONT = 30;
 	public static final int MAX_SPEED = 20;
@@ -28,17 +35,17 @@ public class FlyingKeywords extends JPanel{
 	public int height;
 	public List<String> words;
 
-	FlyingKeywords(){
+	FlyingKeywords() {
 		this.setLayout(null);
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
-		this.addMouseListener(new MouseListener(){
+		this.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getClickCount() == 2 && !e.isConsumed())
-				     System.exit(0);
+					System.exit(0);
 			}
 
 			@Override
@@ -71,18 +78,19 @@ public class FlyingKeywords extends JPanel{
 		initializeWords();
 	}
 
-	public void initializeWords(){
+	public void initializeWords() {
 		words = new ArrayList<String>();
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader("google-10000-english.txt"));
+			br = new BufferedReader(new FileReader(
+					"text/google-10000-english.txt"));
 		} catch (FileNotFoundException e) {
 			System.err.println("File Not Found!");
 			e.printStackTrace();
 		}
 
 		try {
-			while(br.ready())
+			while (br.ready())
 				words.add(br.readLine());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -94,32 +102,33 @@ public class FlyingKeywords extends JPanel{
 		}
 	}
 
-	class FlyingThread extends Thread{
+	class FlyingThread extends Thread {
 		String s;
 		int speed;
 		int font;
 		int y;
 		final int step = 5;
-		FlyingKeywords ft;
+		FlyingKeywords fk;
 
-		FlyingThread(FlyingKeywords ft, String s){
-			this.ft = ft;
+		FlyingThread(FlyingKeywords fk, String s) {
+			this.fk = fk;
 			this.s = s;
 			Random r = new Random();
-			speed = MIN_SPEED + r.nextInt(MAX_SPEED-MIN_SPEED+1);
-			font = MIN_FONT + r.nextInt(MAX_FONT-MIN_FONT+1);
-			y = r.nextInt(ft.height-font-15);
+			speed = MIN_SPEED + r.nextInt(MAX_SPEED - MIN_SPEED + 1);
+			font = MIN_FONT + r.nextInt(MAX_FONT - MIN_FONT + 1);
+			y = r.nextInt(fk.height - font - 15);
 		}
 
 		@Override
-		public void run(){
+		public void run() {
 			final JLabel lw = new JLabel(s);
 			lw.setBackground(Color.BLACK);
 			lw.setFont(new Font("Lucida Grande", Font.PLAIN, font));
-			lw.setSize(new Dimension(s.length()*font, font+5));
+			lw.setForeground(Color.DARK_GRAY);
+			lw.setSize(new Dimension(s.length() * font, font + 5));
 			lw.setLocation(-20, y);
 			lw.setVisible(true);
-			lw.addMouseListener(new MouseListener(){
+			lw.addMouseListener(new MouseListener() {
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -152,9 +161,9 @@ public class FlyingKeywords extends JPanel{
 				}
 
 			});
-			ft.add(lw);
-			for(int i = 0; i< (ft.width+2*step)/step; i++){
-				lw.setLocation(step*i, y);
+			fk.add(lw);
+			for (int i = 0; i < (fk.width + 2 * step) / step; i++) {
+				lw.setLocation(step * i, y);
 				try {
 					Thread.sleep(speed);
 				} catch (InterruptedException e) {
@@ -165,23 +174,24 @@ public class FlyingKeywords extends JPanel{
 		}
 	}
 
-	public void flyAWord(){
+	public void flyAWord() {
 		Random r = new Random();
-		FlyingThread ft = new FlyingThread(this, words.get(r.nextInt(words.size())));
+		FlyingThread ft = new FlyingThread(this, words.get(r.nextInt(words
+				.size())));
 		ft.start();
 	}
 
-	public void flyWords(){
+	public void flyWords() {
 
-		new Thread(new Runnable(){
+		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				Random r = new Random();
-				while(true){
+				while (true) {
 					flyAWord();
 					try {
-						Thread.sleep(r.nextInt(500)+200);
+						Thread.sleep(r.nextInt(500) + 200);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -196,30 +206,29 @@ public class FlyingKeywords extends JPanel{
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		frame.setSize(800, 600); //default window size
+		frame.setLocationRelativeTo(null); //center on screen
 
- 		/** Remove tile. */
-		frame.setUndecorated(true);
+		// Remove title bar and set to full screen.
+		// Todo: Should have a button to switch normal/full screen
+		//frame.setUndecorated(true);
+		//frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
+
+		FlyingKeywords fk = new FlyingKeywords();
+		fk.width = frame.getWidth();
+		fk.height = frame.getHeight();
+		frame.setContentPane(fk);
+
 		frame.setVisible(true);
- 		/** Set it as full screen. */
- 		frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
-		FlyingKeywords ft = new FlyingKeywords();
- 		ft.width = frame.getWidth();
- 		ft.height = frame.getHeight();
-		frame.setContentPane(ft);
-
-		ft.flyWords();
+		fk.flyWords();
 	}
 
 	public static void main(String[] args) {
-
 		SwingUtilities.invokeLater(new Runnable() {
-
 			@Override
 			public void run() {
 				createAndShowGUI();
 			}
-
 		});
-
 	}
 }
