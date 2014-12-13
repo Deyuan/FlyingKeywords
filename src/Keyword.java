@@ -20,26 +20,27 @@ public class Keyword extends JLabel {
 	public static final Color fgColor = Color.GRAY;
 	public static final Color hlColor = Color.GREEN;
 
-	private int y;
-	private int speed;
+	private int speedX;
+	private int speedY;
+	private int posX;
+	private int posY;
 	private int fontSize;
 
-	/** Size of parent dimension, {width, height}. */
-	Dimension pDim = null;
-
-	public Keyword(Term term, Dimension dim) {
+	public Keyword(Term term) {
 		super(term.getWord());
-		pDim = dim;
-		speed = Config.getRandSpeed();
+		speedX = Config.getRandSpeed();
+		speedY = 0;
 		fontSize = Config.getRandFontSize();
-		y = Config.getRandInt(pDim.height-fontSize-15);
 
 		this.setBackground(bgColor);
 		this.setForeground(fgColor);
-		this.setFont(new Font("Lucida Grande", Font.PLAIN, fontSize));
+		this.setFont(new Font("Arial", Font.BOLD, fontSize));
 		this.setSize(new Dimension(term.getWord().length()*fontSize, fontSize+5));
-		this.setLocation(-20, y);
+		posX = 0 - term.getWord().length() * fontSize;
+		posY = Config.getRandInt(Config.getHeight() - fontSize);
+		this.setLocation(posX, posY);
 		this.setVisible(true);
+
 		this.addMouseListener(new MouseListener(){
 
 			@Override
@@ -75,17 +76,16 @@ public class Keyword extends JLabel {
 		});
 	}
 
-	public Dimension getDimension() { return pDim; }
-	public void setDimension(Dimension dim) { pDim = dim; }
-
-	public int getSpeed() { return speed; }
-	public void setSpeed(int speed) { this.speed = speed; }
+	public int getSpeedX() { return speedX; }
+	public void setSpeedX(int speed) { this.speedX = speed; }
 
 	public int getFontSize() { return fontSize; }
 	public void setFontSize(int fontSize) { this.fontSize = fontSize; }
 
-	@Override
-	public int getY() { return y; }
-	public void setY(int y) { this.y = y; }
+	public void updatePosition() {
+		posX += speedX;
+		posY += speedY;
+		this.setLocation(posX, posY);
+	}
 
 }

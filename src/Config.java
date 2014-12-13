@@ -8,14 +8,20 @@ import java.util.Random;
  */
 public class Config {
 
+	private static int width = 0;
+	private static int height = 0;
 	private static int numOfWords = 10;
 	private static int maxFontSize = 50;
-	private static int minFontSize = 10;
-	private static int maxSpeed = 10;
+	private static int minFontSize = 15;
+	private static int maxSpeed = 3;
 	private static int minSpeed = 1;
 	private static boolean forward = true;
 	private static Random rand = new Random();
 
+	public static int getWidth() { return width; }
+	public static void setWidth(int w) { width = w; }
+	public static int getHeight() { return height; }
+	public static void setHeight(int h) { height = h; }
 	public static int getNumOfWords() { return numOfWords; }
 	public static void setNumOfWords(int n) { numOfWords = n; }
 	public static int getMaxFontSize() { return maxFontSize; }

@@ -2,7 +2,7 @@
 
 /**
  * Term: A data structure for a term.
- * @author Deyuan Guo
+ * @author Deyuan Guo, Dawei Fan
  */
 public class Term {
 

@@ -1,9 +1,6 @@
 /* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
 
-import java.awt.Dimension;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * FlyingThread.
@@ -12,58 +9,50 @@ import java.util.Random;
 public class FlyingThread extends Thread {
 
 	private List<Term> termList;
-	private List<Keyword> keywordList;
+	private Keyword[] aliveKeywords;
 	private FlyingKeywords container;
-	private Random rand;
 	final int step = 5;
 
 	FlyingThread(FlyingKeywords container, List<Term> termList) {
 		this.container = container;
 		this.termList = termList;
-		this.rand = new Random();
 		initKeywords();
 	}
 
 	private void initKeywords() {
-		keywordList = new LinkedList<Keyword>();
-		for (int i = 0; i < Config.getNumOfWords(); i++) {
-			addAKeyword();
-//			System.out.println("Speed: "+keyword.getSpeed());
+		aliveKeywords = new Keyword[Config.getNumOfWords()];
+		for (int i = 0; i < aliveKeywords.length; i++) {
+			Keyword kw = newRandKeyword();
+			aliveKeywords[i] = kw;
+			container.add(kw);
 		}
 	}
 
-	/**
-	 * Add a new keyword.
-	 */
-	public void addAKeyword() {
-		int idx = rand.nextInt(termList.size());
-		Keyword keyword =
-				new Keyword(termList.get(idx), new Dimension(1600, 900));
-		keywordList.add(keyword);
-		container.add(keyword);
+	private Keyword newRandKeyword() {
+		int idx = Config.getRandInt(termList.size());
+		return new Keyword(termList.get(idx));
 	}
 
 	@Override
-	public void run(){
-
-		/** Move every keyword. */
-		for (int j = 0; j < 1600; j++) {
-			for (int i = 0; i < keywordList.size(); i++) {
-				if (keywordList.get(i).getX()+keywordList.get(i).getSpeed()>1600){
-					container.remove(keywordList.get(i));
-					keywordList.remove(i);
-					addAKeyword();
-					continue;
-				}
-				keywordList.get(i).setLocation(keywordList.get(i).getX()+keywordList.get(i).getSpeed(), keywordList.get(i).getY());
-
-				try {
-					Thread.sleep(step);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+	public void run() {
+		while (true) {
+			for (int i = 0; i < aliveKeywords.length; i++) {
+				Keyword kw = aliveKeywords[i];
+				kw.updatePosition();
+				if (kw.getX() > Config.getWidth()) {
+					container.remove(kw);
+					kw = newRandKeyword();
+					aliveKeywords[i] = kw;
+					container.add(kw);
 				}
 			}
-		}
 
+			try {
+				Thread.sleep(step);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+
 }

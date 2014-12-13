@@ -23,10 +23,6 @@ public class FlyingKeywords extends JPanel {
 	FlyingKeywords() {
 		this.setLayout(null);
 		this.setBackground(Color.BLACK);
-
-		/* Initialization */
-		Config.setNumOfWords(10);
-		Config.setForward(true);
 		termList = FileIO.readTermList("text/google-10000-english-fix.txt");
 
 		this.addMouseListener(new MouseListener() {
@@ -74,11 +70,17 @@ public class FlyingKeywords extends JPanel {
 	}
 
 	private static void createAndShowGUI() {
+		// Configuration
+		Config.setNumOfWords(10);
+		Config.setForward(true);
+		Config.setWidth(800);
+		Config.setHeight(600);
+
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(Color.BLACK);
 		frame.setResizable(false);
-		frame.setSize(800, 600); //default window size
+		frame.setSize(Config.getWidth(), Config.getHeight());
 		frame.setLocationRelativeTo(null); //center on screen
 
 		// Remove title bar and set to full screen.
