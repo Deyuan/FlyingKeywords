@@ -1,0 +1,9 @@
+term
+* highlight term
+term with notes | notes
+* highlight term with notes | notes
+| notes with no term
+* | notes with no term, but highlight
+| commented term | notes
+term | notes | only the leading '|' and the first '|' will work
+

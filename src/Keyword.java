@@ -10,53 +10,41 @@ import java.util.Random;
 import javax.swing.JLabel;
 
 /**
- * A class to describe a keyword instance.
- *
- * @author Davwei
- * @version 0.1
- *
+ * Keyword.
+ * @author Dawei Fan, Deyuan Guo
  */
-public class Keyword extends JLabel{
+public class Keyword extends JLabel {
 
 	private static final long serialVersionUID = 1L;
-	public static final int MAX_FONT = 100;
-	public static final int MIN_FONT = 30;
+	public static final int MAX_FONT = 50;
+	public static final int MIN_FONT = 10;
 	public static final int MAX_SPEED = 20;
 	public static final int MIN_SPEED = 10;
 
-	/** Background color. */
 	public static final Color bgColor = Color.BLACK;
-	/** Foreground color. */
-	public static final Color fgColor = Color.DARK_GRAY;
-	/** Highlight color. */
+	public static final Color fgColor = Color.GRAY;
 	public static final Color hlColor = Color.GREEN;
 
-	private String name;
 	private int y;
 	private int speed;
 	private int fontSize;
 
 	/** Size of parent dimension, {width, height}. */
-	private int dimension[];
+	Dimension pDim = null;
 
-
-	public Keyword(String s, int d[]){
-		super(s);
+	public Keyword(Term term, Dimension dim) {
+		super(term.getWord());
 		Random r = new Random();
-		dimension = new int[2];
-
-		dimension[0] = d[0];
-		dimension[1] = d[1];
-		this.name = s;
+		pDim = dim;
 
 		setSpeed(MIN_SPEED + r.nextInt(MAX_SPEED-MIN_SPEED+1));
 		fontSize = MIN_FONT + r.nextInt(MAX_FONT-MIN_FONT+1);
-		y = r.nextInt(dimension[1]-fontSize-15);
+		y = r.nextInt(pDim.height-fontSize-15);
 
 		this.setBackground(bgColor);
 		this.setForeground(fgColor);
 		this.setFont(new Font("Lucida Grande", Font.PLAIN, fontSize));
-		this.setSize(new Dimension(s.length()*fontSize, fontSize+5));
+		this.setSize(new Dimension(term.getWord().length()*fontSize, fontSize+5));
 		this.setLocation(-20, y);
 		this.setVisible(true);
 		this.addMouseListener(new MouseListener(){
@@ -94,38 +82,17 @@ public class Keyword extends JLabel{
 		});
 	}
 
+	public Dimension getDimension() { return pDim; }
+	public void setDimension(Dimension dim) { pDim = dim; }
 
-	public int[] getDimension() {
-		return dimension;
-	}
+	public int getSpeed() { return speed; }
+	public void setSpeed(int speed) { this.speed = speed; }
 
-
-	public void setDimension(int dimension[]) {
-		this.dimension = dimension;
-	}
-
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-
-	public int getFontSize() {
-		return fontSize;
-	}
-
-	public void setFontSize(int fontSize) {
-		this.fontSize = fontSize;
-	}
+	public int getFontSize() { return fontSize; }
+	public void setFontSize(int fontSize) { this.fontSize = fontSize; }
 
 	@Override
-	public int getY() {
-		return y;
-	}
+	public int getY() { return y; }
+	public void setY(int y) { this.y = y; }
 
-	public void setY(int y) {
-		this.y = y;
-	}
 }

@@ -1,60 +1,58 @@
 /* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
 
-import java.util.ArrayList;
+import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 /**
- * A thread to make words fly.
- *
- * @author Dawei
- * @version 0.1
- *
+ * FlyingThread.
+ * @author Dawei Fan, Deyuan Guo
  */
-public class FlyingThread extends Thread{
+public class FlyingThread extends Thread {
 
-	private List<String> words;
+	private List<Term> termList;
 	private List<Keyword> keywordList;
-	private FlyingKeywords ft;
+	private FlyingKeywords container;
+	private Random rand;
 	private Config config;
 	final int step = 5;
 
-	FlyingThread(FlyingKeywords ft, List<String> w, Config c){
-		this.ft = ft;
+	FlyingThread(FlyingKeywords container, List<Term> termList, Config c) {
+		this.container = container;
 		this.config = c;
-		this.words = new ArrayList<String>(w);
-		initializeKeywords();
-
+		this.termList = termList;
+		this.rand = new Random();
+		initKeywords();
 	}
 
-	private void initializeKeywords(){
-		Random r = new Random();
+	private void initKeywords() {
 		keywordList = new LinkedList<Keyword>();
-		for(int i = 0; i<config.getCount(); i++){
-			Keyword keyword = new Keyword(words.get(r.nextInt(words.size())), new int[]{1600, 900});
-			keywordList.add(keyword);
-			ft.add(keyword);
+		for (int i = 0; i < config.getCount(); i++) {
+			addAKeyword();
 //			System.out.println("Speed: "+keyword.getSpeed());
 		}
 	}
 
-	public void addAKeyword(){
-		/** Add a new word. */
-		Random r = new Random();
-		Keyword keyword = new Keyword(words.get(r.nextInt(words.size())), new int[]{1600, 900});
+	/**
+	 * Add a new keyword.
+	 */
+	public void addAKeyword() {
+		int idx = rand.nextInt(termList.size());
+		Keyword keyword =
+				new Keyword(termList.get(idx), new Dimension(1600, 900));
 		keywordList.add(keyword);
-		ft.add(keyword);
+		container.add(keyword);
 	}
 
 	@Override
 	public void run(){
 
 		/** Move every keyword. */
-		for(int j = 0; j< 1600; j++){
-			for(int i = 0; i<keywordList.size(); i++){
-				if(keywordList.get(i).getX()+keywordList.get(i).getSpeed()>1600){
-					ft.remove(keywordList.get(i));
+		for (int j = 0; j < 1600; j++) {
+			for (int i = 0; i < keywordList.size(); i++) {
+				if (keywordList.get(i).getX()+keywordList.get(i).getSpeed()>1600){
+					container.remove(keywordList.get(i));
 					keywordList.remove(i);
 					addAKeyword();
 					continue;

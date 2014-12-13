@@ -3,37 +3,36 @@
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
- * FlyingKeywords.
+ * FlyingKeywords Main Entry.
  * @author Dawei Fan, Deyuan Guo
  */
-public class FlyingKeywords extends JPanel{
+public class FlyingKeywords extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public int width;
-	public int height;
-	public List<String> words;
-	public Config config;
-	public FlyingThread flyingThread;
+	private List<Term> termList;
+	private FlyingThread flyingThread;
+	private Config config;
 
 	FlyingKeywords() {
 		this.setLayout(null);
 		this.setBackground(Color.BLACK);
-		this.setVisible(true);
+
+		/* Initialization */
+		config = new Config();
+		config.setCount(10);
+		config.setForward(true);
+		termList = FileIO.readTermList("text/google-10000-english-fix.txt");
+
 		this.addMouseListener(new MouseListener() {
+
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -68,67 +67,18 @@ public class FlyingKeywords extends JPanel{
 
 		});
 
-		config = new Config();
-		config.setCount(10);
-		config.setForward(true);
-
-		/** Initialize words. */
-		initializeWords();
+		this.setVisible(true);
 	}
 
-	public void initializeWords() {
-		words = new ArrayList<String>();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader("text/google-10000-english-fix.txt"));
-		} catch (FileNotFoundException e) {
-			System.err.println("File Not Found!");
-			e.printStackTrace();
-		}
-
-		try {
-			while (br.ready())
-				words.add(br.readLine());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void flyAWord(){
-
-		flyingThread = new FlyingThread(this, words, config);
+	public void flyAWord() {
+		flyingThread = new FlyingThread(this, termList, config);
 		flyingThread.start();
-	}
-
-	public void flyWords() {
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				Random r = new Random();
-				while (true) {
-					flyAWord();
-					try {
-						Thread.sleep(r.nextInt(500) + 200);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-		}).start();
-
 	}
 
 	private static void createAndShowGUI() {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBackground(Color.BLACK);
 		frame.setResizable(false);
 		frame.setSize(800, 600); //default window size
 		frame.setLocationRelativeTo(null); //center on screen
@@ -138,21 +88,12 @@ public class FlyingKeywords extends JPanel{
 		//frame.setUndecorated(true);
 		//frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
 
-		FlyingKeywords fk = new FlyingKeywords();
-		fk.width = frame.getWidth();
-		fk.height = frame.getHeight();
-		frame.setContentPane(fk);
+		FlyingKeywords pane = new FlyingKeywords();
+		frame.setContentPane(pane);
 
 		frame.setVisible(true);
- 		/** Set it as full screen. */
- 		frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
-		FlyingKeywords ft = new FlyingKeywords();
- 		ft.width = frame.getWidth();
- 		ft.height = frame.getHeight();
-		frame.setContentPane(ft);
 
-		ft.flyAWord();
-//		ft.flyWords();
+		pane.flyAWord();
 	}
 
 	public static void main(String[] args) {
@@ -163,4 +104,5 @@ public class FlyingKeywords extends JPanel{
 			}
 		});
 	}
+
 }
