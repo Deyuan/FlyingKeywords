@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

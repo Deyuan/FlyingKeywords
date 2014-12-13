@@ -1,11 +1,11 @@
+/* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-/* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
 
 /**
  * FileIO.

@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;

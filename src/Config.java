@@ -1,3 +1,4 @@
+/* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
 
 /**
  * A class to configure the flying keywords.
