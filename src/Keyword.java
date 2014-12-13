@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Random;
 
 import javax.swing.JLabel;
 
@@ -16,10 +15,6 @@ import javax.swing.JLabel;
 public class Keyword extends JLabel {
 
 	private static final long serialVersionUID = 1L;
-	public static final int MAX_FONT = 50;
-	public static final int MIN_FONT = 10;
-	public static final int MAX_SPEED = 20;
-	public static final int MIN_SPEED = 10;
 
 	public static final Color bgColor = Color.BLACK;
 	public static final Color fgColor = Color.GRAY;
@@ -34,12 +29,10 @@ public class Keyword extends JLabel {
 
 	public Keyword(Term term, Dimension dim) {
 		super(term.getWord());
-		Random r = new Random();
 		pDim = dim;
-
-		setSpeed(MIN_SPEED + r.nextInt(MAX_SPEED-MIN_SPEED+1));
-		fontSize = MIN_FONT + r.nextInt(MAX_FONT-MIN_FONT+1);
-		y = r.nextInt(pDim.height-fontSize-15);
+		speed = Config.getRandSpeed();
+		fontSize = Config.getRandFontSize();
+		y = Config.getRandInt(pDim.height-fontSize-15);
 
 		this.setBackground(bgColor);
 		this.setForeground(fgColor);

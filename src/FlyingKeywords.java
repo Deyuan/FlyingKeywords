@@ -19,16 +19,14 @@ public class FlyingKeywords extends JPanel {
 
 	private List<Term> termList;
 	private FlyingThread flyingThread;
-	private Config config;
 
 	FlyingKeywords() {
 		this.setLayout(null);
 		this.setBackground(Color.BLACK);
 
 		/* Initialization */
-		config = new Config();
-		config.setCount(10);
-		config.setForward(true);
+		Config.setNumOfWords(10);
+		Config.setForward(true);
 		termList = FileIO.readTermList("text/google-10000-english-fix.txt");
 
 		this.addMouseListener(new MouseListener() {
@@ -71,7 +69,7 @@ public class FlyingKeywords extends JPanel {
 	}
 
 	public void flyAWord() {
-		flyingThread = new FlyingThread(this, termList, config);
+		flyingThread = new FlyingThread(this, termList);
 		flyingThread.start();
 	}
 

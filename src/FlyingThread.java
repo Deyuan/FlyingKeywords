@@ -15,12 +15,10 @@ public class FlyingThread extends Thread {
 	private List<Keyword> keywordList;
 	private FlyingKeywords container;
 	private Random rand;
-	private Config config;
 	final int step = 5;
 
-	FlyingThread(FlyingKeywords container, List<Term> termList, Config c) {
+	FlyingThread(FlyingKeywords container, List<Term> termList) {
 		this.container = container;
-		this.config = c;
 		this.termList = termList;
 		this.rand = new Random();
 		initKeywords();
@@ -28,7 +26,7 @@ public class FlyingThread extends Thread {
 
 	private void initKeywords() {
 		keywordList = new LinkedList<Keyword>();
-		for (int i = 0; i < config.getCount(); i++) {
+		for (int i = 0; i < Config.getNumOfWords(); i++) {
 			addAKeyword();
 //			System.out.println("Speed: "+keyword.getSpeed());
 		}
