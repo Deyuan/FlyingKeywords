@@ -63,7 +63,7 @@ public class FlyingKeywords extends JPanel{
 		});
 
 		config = new Config();
-		config.setCount(5);
+		config.setCount(10);
 		config.setForward(true);
 
 		/** Initialize words. */

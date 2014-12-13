@@ -33,28 +33,28 @@ public class FlyingThread extends Thread{
 			Keyword keyword = new Keyword(words.get(r.nextInt(words.size())), new int[]{1600, 900});
 			keywordList.add(keyword);
 			ft.add(keyword);
-			System.out.println("Speed: "+keyword.getSpeed());
+//			System.out.println("Speed: "+keyword.getSpeed());
 		}
 	}
 
-
+	public void addAKeyword(){
+		/** Add a new word. */
+		Random r = new Random();
+		Keyword keyword = new Keyword(words.get(r.nextInt(words.size())), new int[]{1600, 900});
+		keywordList.add(keyword);
+		ft.add(keyword);
+	}
 
 	@Override
 	public void run(){
 
-		for(int i = 0; i<keywordList.size(); i++){
-
-			/** Move every keyword. */
-			for(int j = 0; j< 1600; j++){
+		/** Move every keyword. */
+		for(int j = 0; j< 1600; j++){
+			for(int i = 0; i<keywordList.size(); i++){
 				if(keywordList.get(i).getX()+keywordList.get(i).getSpeed()>1600){
+					ft.remove(keywordList.get(i));
 					keywordList.remove(i);
-
-					/** Add a new word. */
-					Random r = new Random();
-					Keyword keyword = new Keyword(words.get(r.nextInt(words.size())), new int[]{1600, 900});
-					keywordList.add(keyword);
-					ft.add(keyword);
-
+					addAKeyword();
 					continue;
 				}
 				keywordList.get(i).setLocation(keywordList.get(i).getX()+keywordList.get(i).getSpeed(), keywordList.get(i).getY());
