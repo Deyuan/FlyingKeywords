@@ -1,11 +1,11 @@
 /* Copyright (C) 2014 Deyuan Guo & Dawei Fan. All Rights Reserved. */
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 /**
@@ -16,29 +16,32 @@ public class Keyword extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final Color bgColor = Color.BLACK;
-	public static final Color fgColor = Color.GRAY;
-	public static final Color hlColor = Color.GREEN;
+	private static final Color bgColor = Color.BLACK;
+	private static final Color fgColor = Color.GRAY;
+	private static final Color hlColor = Color.GREEN;
 
-	private int speedX;
-	private int speedY;
-	private int posX;
-	private int posY;
+	private double speedX;
+	private double speedY;
+	private double posX;
+	private double posY;
 	private int fontSize;
 
 	public Keyword(Term term) {
-		super(term.getWord());
-		speedX = Config.getRandSpeed();
-		speedY = 0;
-		fontSize = Config.getRandFontSize();
+		this.setBorder(BorderFactory.createLineBorder(Color.GRAY)); //for debug
 
+		this.setText(term.getWord());
+		fontSize = Config.getRandFontSize();
 		this.setBackground(bgColor);
 		this.setForeground(fgColor);
 		this.setFont(new Font("Arial", Font.BOLD, fontSize));
-		this.setSize(new Dimension(term.getWord().length()*fontSize, fontSize+5));
-		posX = 0 - term.getWord().length() * fontSize;
-		posY = Config.getRandInt(Config.getHeight() - fontSize);
-		this.setLocation(posX, posY);
+		this.setSize(this.getPreferredSize());
+
+		speedX = Config.getRandSpeed() * ((double)fontSize / Config.getMaxFontSize());
+		speedY = 0;
+
+		posX = 0 - this.getWidth();
+		posY = Config.getRandInt(Config.getHeight() - fontSize - 10);
+		this.setLocation((int)posX, (int)posY);
 		this.setVisible(true);
 
 		this.addMouseListener(new MouseListener(){
@@ -76,16 +79,19 @@ public class Keyword extends JLabel {
 		});
 	}
 
-	public int getSpeedX() { return speedX; }
-	public void setSpeedX(int speed) { this.speedX = speed; }
+	public double getSpeedX() { return speedX; }
+	public void setSpeedX(double speed) { this.speedX = speed; }
 
 	public int getFontSize() { return fontSize; }
 	public void setFontSize(int fontSize) { this.fontSize = fontSize; }
 
-	public void updatePosition() {
+	/**
+	 * Update the location of the current keyword.
+	 */
+	public void updateLocation() {
 		posX += speedX;
 		posY += speedY;
-		this.setLocation(posX, posY);
+		this.setLocation((int)posX, (int)posY);
 	}
 
 }

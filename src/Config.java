@@ -11,8 +11,8 @@ public class Config {
 	private static int width = 1024;
 	private static int height = 768;
 	private static int numOfWords = 10;
-	private static int maxFontSize = 50;
-	private static int minFontSize = 15;
+	private static int maxFontSize = 60;
+	private static int minFontSize = 20;
 	private static int maxSpeed = 3;
 	private static int minSpeed = 1;
 	private static boolean forward = true;
@@ -35,11 +35,20 @@ public class Config {
 	public static boolean getForward() { return forward; }
 	public static void setForward(boolean b) { forward = b; }
 
+	/** Get a random integer in range [0, n) */
 	public static int getRandInt(int n) { return rand.nextInt(n); }
+
+	/** Get a random double in range [0.0, 1.0) */
+	public static double getRandDouble() { return rand.nextDouble(); }
+
+	/** Get a random integer in range [min, max] as the font size */
 	public static int getRandFontSize() {
 		return minFontSize + rand.nextInt(maxFontSize - minFontSize + 1);
 	}
-	public static int getRandSpeed() {
-		return minSpeed + rand.nextInt(maxSpeed - minSpeed + 1);
+
+	/** Get a random double in range [min, max) as the speed */
+	public static double getRandSpeed() {
+		return minSpeed + rand.nextDouble() * (maxSpeed - minSpeed + 1);
 	}
+
 }

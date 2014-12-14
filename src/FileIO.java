@@ -15,8 +15,14 @@ import java.util.List;
  */
 public class FileIO {
 
+	/**
+	 * Read a file and extract term list
+	 * @param filePath
+	 * @return A term list
+	 */
 	public static List<Term> readTermList(String filePath) {
 		List<Term> tList = new ArrayList<Term>();
+		if (filePath == null) return tList;
 
 		BufferedReader in = null;
 		try {
@@ -40,6 +46,11 @@ public class FileIO {
 		return tList;
 	}
 
+	/**
+	 * Write the term list into a file
+	 * @param termList
+	 * @param filePath
+	 */
 	public static void writeTermList(List<Term> termList, String filePath) {
 		PrintWriter out = null;
 		try {

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /**
- * FlyingCanvas.
+ * FlyingCanvas, a JPanel containing all the flying words.
  * @author Dawei Fan, Deyuan Guo
  */
 public class FlyingCanvas extends JPanel {
@@ -18,43 +18,56 @@ public class FlyingCanvas extends JPanel {
 	final int step = 5;
 
 	FlyingCanvas(List<Term> termList) {
+		this.setLayout(null);
 		this.termList = termList;
 		initKeywords();
 
-		this.setLayout(null);
 		this.setBackground(Color.BLACK);
-		this.setSize(Config.getWidth(), Config.getHeight());
+		this.setSize(Config.getWidth() - 10, Config.getHeight() - 10);
+		this.setLocation(5, 5);
+		this.setOpaque(true);
 
 		this.setVisible(true);
 		flyingThread.start();
 	}
 
+	/**
+	 * Initialize all the keyword slots.
+	 */
 	private void initKeywords() {
+		if (termList.size() == 0) return;
 		aliveKeywords = new Keyword[Config.getNumOfWords()];
 		for (int i = 0; i < aliveKeywords.length; i++) {
-			Keyword kw = newRandKeyword();
-			aliveKeywords[i] = kw;
-			add(kw);
+			newRandKeyword(i);
 		}
 	}
 
-	private Keyword newRandKeyword() {
-		int idx = Config.getRandInt(termList.size());
-		return new Keyword(termList.get(idx));
+	/**
+	 * Add one new random keyword into the slot, and add to screen.
+	 * @param slot
+	 */
+	private void newRandKeyword(int slot) {
+		int termId = Config.getRandInt(termList.size());
+		Term term = termList.get(termId);
+		//TODO: deal with empty string
+		Keyword kw = new Keyword(term);
+		aliveKeywords[slot] = kw;
+		add(kw);
 	}
 
+	/**
+	 * A thread keeping updating all the keywords.
+	 */
 	private Thread flyingThread = new Thread() {
 		@Override
 		public void run() {
-			while (true) {
+			while (aliveKeywords != null) {
 				for (int i = 0; i < aliveKeywords.length; i++) {
 					Keyword kw = aliveKeywords[i];
-					kw.updatePosition();
+					kw.updateLocation();
 					if (kw.getX() > Config.getWidth()) {
 						remove(kw);
-						kw = newRandKeyword();
-						aliveKeywords[i] = kw;
-						add(kw);
+						newRandKeyword(i);
 					}
 				}
 
