@@ -13,7 +13,7 @@ public class Config {
 	private static int numOfWords = 10;
 	private static int maxFontSize = 60;
 	private static int minFontSize = 20;
-	private static int maxSpeed = 3;
+	private static int maxSpeed = 2;
 	private static int minSpeed = 1;
 	private static boolean forward = true;
 	private static Random rand = new Random();

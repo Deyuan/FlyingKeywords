@@ -23,12 +23,16 @@ public class FlyingCanvas extends JPanel {
 		initKeywords();
 
 		this.setBackground(Color.BLACK);
-		this.setSize(Config.getWidth() - 10, Config.getHeight() - 10);
 		this.setLocation(5, 5);
+		this.resize();
 		this.setOpaque(true);
 
 		this.setVisible(true);
 		flyingThread.start();
+	}
+
+	public void resize() {
+		this.setSize(Config.getWidth() - 10, Config.getHeight() - 10);
 	}
 
 	/**

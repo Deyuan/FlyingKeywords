@@ -3,6 +3,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -24,17 +25,23 @@ public class FlyingKeywords extends JLayeredPane {
 
 	private static final long serialVersionUID = 1L;
 
+	private JFrame parentFrame;
 	private List<Term> termList;
 	private FlyingCanvas canvas;
-	private JButton fileChooser;
+	private JButton bFileChooser;
 	private JFileChooser fc;
+	private JButton bFullScreen;
+	private boolean isFullScreen;
 
-	FlyingKeywords() {
+	FlyingKeywords(JFrame frame) {
+		parentFrame = frame;
+		isFullScreen = false;
 		this.setLayout(null);
 		this.setBackground(Color.DARK_GRAY);
 
-		addFileChooser();
 		addFlyingCanvas(null);
+		addFileChooserButton();
+		addFullScreenButton();
 
 		this.setPreferredSize(new Dimension(Config.getWidth(), Config.getHeight()));
 		this.setOpaque(true);
@@ -76,7 +83,10 @@ public class FlyingKeywords extends JLayeredPane {
 		});
 	}
 
-	private void addFileChooser() {
+	/**
+	 * Add file chooser button to the main pane.
+	 */
+	private void addFileChooserButton() {
 		fc = new JFileChooser();
 		fc.setCurrentDirectory(new File("."));
 
@@ -87,7 +97,7 @@ public class FlyingKeywords extends JLayeredPane {
 		b.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (fc.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION) {
+				if (fc.showOpenDialog(bFileChooser) == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
 					addFlyingCanvas(file.getAbsolutePath());
 				} else {
@@ -98,10 +108,55 @@ public class FlyingKeywords extends JLayeredPane {
 		b.setSize(20, 20);
 		b.setLocation(10, 10);
 		b.setOpaque(true);
-		fileChooser = b;
-		this.add(fileChooser, new Integer(2));
+		bFileChooser = b;
+		this.add(bFileChooser, new Integer(2));
 	}
 
+	/**
+	 * Add full screen button to the main pane.
+	 */
+	private void addFullScreenButton() {
+		JButton b = new JButton("Full");
+		b.setBackground(Color.BLACK);
+		b.setForeground(Color.BLACK);
+		b.setFont(new Font("Lucida Grande", Font.PLAIN, 7));
+		b.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switchFullScreen();
+			}
+		});
+		b.setSize(20, 20);
+		b.setLocation(35, 10);
+		b.setOpaque(true);
+		bFullScreen = b;
+		this.add(bFullScreen, new Integer(2));
+	}
+
+	/**
+	 * Switch between full screen mode and normal mode.
+	 */
+	private void switchFullScreen() {
+		GraphicsDevice device = this.getGraphicsConfiguration().getDevice();
+		if (isFullScreen) {
+			device.setFullScreenWindow(null);
+			Config.setWidth(1024);
+			Config.setHeight(768);
+			canvas.resize();
+			isFullScreen = false;
+		} else {
+			device.setFullScreenWindow(parentFrame);
+			Config.setWidth(parentFrame.getWidth());
+			Config.setHeight(parentFrame.getHeight());
+			canvas.resize();
+			isFullScreen = true;
+		}
+	}
+
+	/**
+	 * Generate termList, and create keyword canvas.
+	 * @param filePath
+	 */
 	private void addFlyingCanvas(String filePath) {
 		if (canvas != null) this.remove(canvas);
 		termList = FileIO.readTermList(filePath);
@@ -115,12 +170,7 @@ public class FlyingKeywords extends JLayeredPane {
 		frame.setResizable(false);
 		frame.setBackground(Color.BLACK);
 
-		// Remove title bar and set to full screen.
-		// TODO: Should have a button to switch normal/full screen
-		//frame.setUndecorated(true);
-		//frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
-
-		FlyingKeywords pane = new FlyingKeywords();
+		FlyingKeywords pane = new FlyingKeywords(frame);
 		frame.setContentPane(pane);
 		frame.pack();
 		frame.setLocationRelativeTo(null); //center on screen

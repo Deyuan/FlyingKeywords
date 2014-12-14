@@ -27,7 +27,7 @@ public class Keyword extends JLabel {
 	private int fontSize;
 
 	public Keyword(Term term) {
-		this.setBorder(BorderFactory.createLineBorder(Color.GRAY)); //for debug
+		this.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY)); //for debug
 
 		this.setText(term.getWord());
 		fontSize = Config.getRandFontSize();
