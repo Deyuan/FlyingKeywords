@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -16,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  * FlyingKeywords Main Entry.
@@ -28,6 +32,7 @@ public class FlyingKeywords extends JLayeredPane {
 	private JFrame parentFrame;
 	private List<Term> termList;
 	private FlyingCanvas canvas;
+	private JButton bExit;
 	private JButton bFileChooser;
 	private JFileChooser fc;
 	private JButton bFullScreen;
@@ -40,6 +45,7 @@ public class FlyingKeywords extends JLayeredPane {
 		this.setBackground(Color.DARK_GRAY);
 
 		addFlyingCanvas(null);
+		addExitButton();
 		addFileChooserButton();
 		addFullScreenButton();
 
@@ -83,18 +89,52 @@ public class FlyingKeywords extends JLayeredPane {
 		});
 	}
 
+	private JButton buttonTemplate(String text, String tip, int x, int y) {
+		JButton b = new JButton(text) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Point getToolTipLocation(MouseEvent e) {
+				return new Point(0, 25);
+			}
+		};
+		b.setToolTipText(tip);
+		b.setFocusable(false);
+		b.setBackground(Color.BLACK);
+		b.setForeground(Color.GRAY);
+		b.setFont(new Font("Arial", Font.BOLD, 10));
+		b.setMargin(new Insets(0,0,0,1));
+		b.setLocation(x, y);
+		b.setSize(20, 20);
+		b.setOpaque(true);
+		return b;
+	}
+
+	/**
+	 * Add file chooser button to the main pane.
+	 */
+	private void addExitButton() {
+		bExit = buttonTemplate("E", "Exit <Alt+E>", 10, 10);
+		bExit.setMnemonic(KeyEvent.VK_E);
+		bExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		this.add(bExit, new Integer(2));
+	}
+
 	/**
 	 * Add file chooser button to the main pane.
 	 */
 	private void addFileChooserButton() {
 		fc = new JFileChooser();
-		fc.setCurrentDirectory(new File("."));
+		fc.setCurrentDirectory(new File("./text"));
 
-		JButton b = new JButton("File");
-		b.setBackground(Color.BLACK);
-		b.setForeground(Color.BLACK);
-		b.setFont(new Font("Lucida Grande", Font.PLAIN, 7));
-		b.addActionListener(new ActionListener() {
+		bFileChooser = buttonTemplate("R", "Read File... <Alt+R>", 35, 10);
+		bExit.setMnemonic(KeyEvent.VK_R);
+		bFileChooser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (fc.showOpenDialog(bFileChooser) == JFileChooser.APPROVE_OPTION) {
@@ -105,10 +145,6 @@ public class FlyingKeywords extends JLayeredPane {
 				}
 			}
 		});
-		b.setSize(20, 20);
-		b.setLocation(10, 10);
-		b.setOpaque(true);
-		bFileChooser = b;
 		this.add(bFileChooser, new Integer(2));
 	}
 
@@ -116,20 +152,14 @@ public class FlyingKeywords extends JLayeredPane {
 	 * Add full screen button to the main pane.
 	 */
 	private void addFullScreenButton() {
-		JButton b = new JButton("Full");
-		b.setBackground(Color.BLACK);
-		b.setForeground(Color.BLACK);
-		b.setFont(new Font("Lucida Grande", Font.PLAIN, 7));
-		b.addActionListener(new ActionListener() {
+		bFullScreen = buttonTemplate("F", "Full Screen <Alt+F>", 60, 10);
+		bExit.setMnemonic(KeyEvent.VK_F);
+		bFullScreen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				switchFullScreen();
 			}
 		});
-		b.setSize(20, 20);
-		b.setLocation(35, 10);
-		b.setOpaque(true);
-		bFullScreen = b;
 		this.add(bFullScreen, new Integer(2));
 	}
 
@@ -179,6 +209,13 @@ public class FlyingKeywords extends JLayeredPane {
 	}
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(
+					UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

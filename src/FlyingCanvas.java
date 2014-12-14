@@ -70,7 +70,7 @@ public class FlyingCanvas extends JPanel {
 					Keyword kw = aliveKeywords[i];
 					kw.updateLocation();
 					if ((Config.isLeftToRight() && kw.getX() > Config.getWidth()) ||
-						(!Config.isLeftToRight() && kw.getX() <= 0 - kw.getHeight())) {
+						(!Config.isLeftToRight() && kw.getX() <= 0 - kw.getWidth())) {
 						remove(kw);
 						newRandKeyword(i);
 					}

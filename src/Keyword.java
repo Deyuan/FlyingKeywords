@@ -28,26 +28,10 @@ public class Keyword extends JLabel {
 
 	public Keyword(Term term) {
 		this.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY)); //for debug
+		this.setBackground(bgColor);
 
 		this.setText(term.getWord());
-		fontSize = Config.getRandFontSize();
-		this.setBackground(bgColor);
-		this.setForeground(fgColor);
-		this.setFont(new Font("Arial", Font.BOLD, fontSize));
-		this.setSize(this.getPreferredSize());
-
-		speedX = Config.getRandSpeed() * ((double)fontSize / Config.getMaxFontSize());
-		speedY = 0;
-		posX = 0 - this.getWidth();
-		posY = Config.getRandInt(Config.getHeight() - fontSize - 10);
-
-		if (!Config.isLeftToRight()) {
-			speedX = -speedX;
-			speedY = -speedY;
-			posX = Config.getWidth();
-		}
-
-		this.setLocation((int)posX, (int)posY);
+		configDisplay();
 		this.setVisible(true);
 
 		this.addMouseListener(new MouseListener(){
@@ -98,6 +82,36 @@ public class Keyword extends JLabel {
 		posX += speedX;
 		posY += speedY;
 		this.setLocation((int)posX, (int)posY);
+	}
+
+	/**
+	 * Initialize the font color, starting location, and speed.
+	 */
+	private void configDisplay() {
+		// set font size
+		fontSize = Config.getRandFontSize();
+		this.setFont(new Font("Arial", Font.BOLD, fontSize));
+		this.setSize(this.getPreferredSize());
+		double sizeScale = (double)fontSize /
+				(Config.getMaxFontSize() - Config.getMinFontSize());
+
+		// set speed
+		if (!Config.isLeftToRight()) {
+			speedX = - Config.getRandSpeed() * (sizeScale + 0.05);
+			speedY = 0;
+			posX = Config.getWidth();
+			posY = Config.getRandInt(Config.getHeight() - this.getHeight());
+		} else {
+			speedX = Config.getRandSpeed() * (sizeScale + 0.05);
+			speedY = 0;
+			posX = 0 - this.getWidth();
+			posY = Config.getRandInt(Config.getHeight() - this.getHeight());
+		}
+		this.setLocation((int)posX, (int)posY);
+
+		// set font color
+		int color = (int)(255 - 100 * sizeScale);
+		this.setForeground(new Color(color, color, color));
 	}
 
 }
