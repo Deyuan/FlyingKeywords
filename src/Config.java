@@ -15,7 +15,7 @@ public class Config {
 	private static int minFontSize = 20;
 	private static int maxSpeed = 2;
 	private static int minSpeed = 1;
-	private static boolean forward = true;
+	private static boolean leftToRight = false;
 	private static Random rand = new Random();
 
 	public static int getWidth() { return width; }
@@ -32,8 +32,8 @@ public class Config {
 	public static void setMaxSpeed(int size) { maxSpeed = size; }
 	public static int getMinSpeed() { return minSpeed; }
 	public static void setMinSpeed(int size) { minSpeed = size; }
-	public static boolean getForward() { return forward; }
-	public static void setForward(boolean b) { forward = b; }
+	public static boolean isLeftToRight() { return leftToRight; }
+	public static void setLeftToRight(boolean b) { leftToRight = b; }
 
 	/** Get a random integer in range [0, n) */
 	public static int getRandInt(int n) { return rand.nextInt(n); }

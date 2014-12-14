@@ -38,9 +38,15 @@ public class Keyword extends JLabel {
 
 		speedX = Config.getRandSpeed() * ((double)fontSize / Config.getMaxFontSize());
 		speedY = 0;
-
 		posX = 0 - this.getWidth();
 		posY = Config.getRandInt(Config.getHeight() - fontSize - 10);
+
+		if (!Config.isLeftToRight()) {
+			speedX = -speedX;
+			speedY = -speedY;
+			posX = Config.getWidth();
+		}
+
 		this.setLocation((int)posX, (int)posY);
 		this.setVisible(true);
 
