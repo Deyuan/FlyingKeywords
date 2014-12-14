@@ -18,11 +18,11 @@ public class FlyingKeywords extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private List<Term> termList;
-	private FlyingThread flyingThread;
+	private FlyingCanvas canvas;
 
 	FlyingKeywords() {
 		this.setLayout(null);
-		this.setBackground(Color.BLACK);
+		this.setBackground(Color.DARK_GRAY);
 		termList = FileIO.readTermList("text/google-10000-english-fix.txt");
 
 		this.addMouseListener(new MouseListener() {
@@ -61,21 +61,12 @@ public class FlyingKeywords extends JPanel {
 
 		});
 
+		canvas = new FlyingCanvas(termList);
+		this.add(canvas);
 		this.setVisible(true);
 	}
 
-	public void flyAWord() {
-		flyingThread = new FlyingThread(this, termList);
-		flyingThread.start();
-	}
-
 	private static void createAndShowGUI() {
-		// Configuration
-		Config.setNumOfWords(10);
-		Config.setForward(true);
-		Config.setWidth(800);
-		Config.setHeight(600);
-
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(Color.BLACK);
@@ -84,7 +75,7 @@ public class FlyingKeywords extends JPanel {
 		frame.setLocationRelativeTo(null); //center on screen
 
 		// Remove title bar and set to full screen.
-		// Todo: Should have a button to switch normal/full screen
+		// TODO: Should have a button to switch normal/full screen
 		//frame.setUndecorated(true);
 		//frame.getGraphicsConfiguration().getDevice().setFullScreenWindow(frame);
 
@@ -92,8 +83,6 @@ public class FlyingKeywords extends JPanel {
 		frame.setContentPane(pane);
 
 		frame.setVisible(true);
-
-		pane.flyAWord();
 	}
 
 	public static void main(String[] args) {

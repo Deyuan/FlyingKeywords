@@ -8,8 +8,8 @@ import java.util.Random;
  */
 public class Config {
 
-	private static int width = 0;
-	private static int height = 0;
+	private static int width = 1024;
+	private static int height = 768;
 	private static int numOfWords = 10;
 	private static int maxFontSize = 50;
 	private static int minFontSize = 15;
